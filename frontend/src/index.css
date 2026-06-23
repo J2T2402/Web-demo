@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --map-scale: 1;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+@layer base {
+  body {
+    @apply font-sans text-slate-800 antialiased bg-slate-50 dark:bg-slate-950 transition-colors duration-300;
+    margin: 0;
+  }
+}
+
+/* Vector sharp rendering rules to solve the zoom blur issue */
+svg {
+  shape-rendering: geometricPrecision;
+  text-rendering: geometricPrecision;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  /* Immersive sea map background: deep mysterious ocean dark vs pristine crystal light */
+  .sea-bg.sea-dark {
+    background-color: #060b13;
+    background-image:
+      radial-gradient(120% 120% at 50% 10%, #0d1e33 0%, #07101c 45%, #020408 100%);
+  }
+  .sea-grid.sea-dark {
+    background-image: 
+      linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .sea-bg.sea-light {
+    background-color: #f1f7fc;
+    background-image:
+      radial-gradient(120% 120% at 50% 10%, #ffffff 0%, #e8f2fc 50%, #d4e7fa 100%);
+  }
+  .sea-grid.sea-light {
+    background-image: 
+      linear-gradient(rgba(14, 165, 233, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(14, 165, 233, 0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* Glassmorphism premium design system cards */
+  .glass-panel {
+    @apply backdrop-blur-xl bg-white/70 dark:bg-slate-950/75 border border-slate-200/50 dark:border-white/10 shadow-xl;
+  }
+  .glass-panel-hover {
+    @apply transition-all duration-300 hover:border-red-400/40 dark:hover:border-amber-400/25 hover:shadow-2xl hover:shadow-red-500/5 dark:hover:shadow-amber-500/5;
+  }
+  .glass-input {
+    @apply rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 outline-none transition-all duration-300 focus:border-red-500 dark:focus:border-amber-500 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-red-500/10 dark:focus:ring-amber-500/10 text-slate-800 dark:text-slate-100;
+  }
+  
+  /* Glowing badges */
+  .glow-red {
+    box-shadow: 0 0 15px rgba(220, 38, 38, 0.35);
+  }
+  .glow-amber {
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.35);
+  }
+  .glow-gold-text {
+    text-shadow: 0 0 8px rgba(255, 234, 0, 0.45);
+  }
+  .glow-red-text {
+    text-shadow: 0 0 8px rgba(218, 37, 29, 0.45);
+  }
+  
+  /* Modern dynamic background blobs for login */
+  .bg-blob {
+    @apply absolute rounded-full filter blur-[80px] opacity-20 dark:opacity-30 animate-pulse;
+  }
+}
+
+/* react-zoom-pan-pinch: container sizes */
+.react-transform-wrapper,
+.react-transform-component {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* CRITICAL FIX: Remove will-change transform to prevent browser from rasterizing SVG at 1x scale */
+.react-transform-component {
+  will-change: auto !important;
+}
+
+/* Map area styling */
+.sea-bg {
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* Custom scrollbars for side panels */
+.no-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.no-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.no-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-slate-200 dark:bg-slate-800 rounded-full;
+}
+.no-scrollbar::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-300 dark:bg-slate-700;
+}
+
+/* Animation durations */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Custom golden keyframe pulsing border */
+@keyframes glowPulse {
+  0%, 100% { border-color: rgba(220, 38, 38, 0.3); box-shadow: 0 0 10px rgba(220, 38, 38, 0.1); }
+  50% { border-color: rgba(220, 38, 38, 0.7); box-shadow: 0 0 20px rgba(220, 38, 38, 0.35); }
+}
+.animate-glow-pulse {
+  animation: glowPulse 3s infinite ease-in-out;
+}
+

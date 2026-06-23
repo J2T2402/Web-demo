@@ -1,0 +1,54 @@
+// Prisma schema — mô hình dữ liệu theo Mục 4 của plan.
+// Provider PostgreSQL cho production; chống chọn trùng bằng UNIQUE + transaction (Mục 9).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum LocationStatus {
+  AVAILABLE
+  OWNED
+}
+
+/// Địa danh / Ghim (1..50). id cố định theo LocationList.md.
+model Location {
+  id        Int            @id
+  name      String
+  province  String
+  lat       Float
+  lng       Float
+  status    LocationStatus @default(AVAILABLE)
+  claim     Claim?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@index([status])
+}
+
+/// Lượt sở hữu. PII (họ tên + SĐT) mã hóa reversible; phoneHash để chống trùng SĐT.
+model Claim {
+  id          Int      @id @default(autoincrement())
+  location    Location @relation(fields: [locationId], references: [id])
+  locationId  Int      @unique // 1 địa danh = 1 chủ
+  fullNameEnc String // Họ tên — mã hóa AES-256-GCM
+  phoneEnc    String // SĐT — mã hóa AES-256-GCM
+  phoneHash   String   @unique // HMAC SĐT — 1 SĐT = 1 ghim, không cần giải mã để kiểm tra trùng
+  ipAddress   String? // chỉ phục vụ rate-limit/chống spam, KHÔNG dùng làm danh tính
+  createdAt   DateTime @default(now())
+
+  @@index([phoneHash])
+}
+
+/// Tài khoản quản trị.
+model AdminUser {
+  id           Int       @id @default(autoincrement())
+  username     String    @unique
+  passwordHash String // bcrypt
+  createdAt    DateTime  @default(now())
+  lastLoginAt  DateTime?
+}

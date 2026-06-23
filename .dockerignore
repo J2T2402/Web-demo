@@ -1,0 +1,11 @@
+# Không gửi vào build context (tránh copy nhầm node_modules Windows, secret, build cũ)
+**/node_modules
+**/dist
+**/.env
+.git
+*.log
+.claude
+*.local
+
+# scratch / tài liệu không cần trong image (LocationList.md được COPY tường minh nên KHÔNG loại document/)
+plan/

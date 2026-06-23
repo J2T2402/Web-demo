@@ -1,0 +1,21 @@
+/** ISO -> "dd/MM/yyyy HH:mm" */
+export function formatTime(iso: string): string {
+  const d = new Date(iso)
+  if (isNaN(d.getTime())) return '—'
+  const p = (n: number) => String(n).padStart(2, '0')
+  return `${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`
+}
+
+// Dải dấu kết hợp Unicode (U+0300..U+036F). Dùng RegExp constructor để nguồn
+// luôn rõ ràng, không phụ thuộc cách trình soạn thảo lưu ký tự tổ hợp.
+const COMBINING_MARKS = new RegExp('[\\u0300-\\u036f]', 'g')
+
+/** Bỏ dấu tiếng Việt để tìm kiếm không phân biệt dấu. */
+export function deAccent(s: string): string {
+  return s
+    .normalize('NFD')
+    .replace(COMBINING_MARKS, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D')
+    .toLowerCase()
+}
