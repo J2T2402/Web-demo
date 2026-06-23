@@ -14,8 +14,10 @@ services:
         condition: service_healthy
     # Đồng bộ schema vào DB rồi khởi động (server tự seed 50 địa danh + admin).
     command: sh -c "npx prisma db push --skip-generate && node dist/index.js"
+    # Chỉ mở ra localhost (an toàn: tránh Docker tự mở cổng ra internet vượt UFW).
+    # Production có Caddy đứng trước (xem docker-compose.prod.yml) gọi app qua mạng nội bộ.
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
 
   db:
     image: postgres:16-alpine
@@ -32,20 +34,7 @@ services:
       timeout: 3s
       retries: 5
 
-  # ---- Tùy chọn: bật HTTPS tự động bằng Caddy (bỏ comment + sửa domain trong Caddyfile) ----
-  # caddy:
-  #   image: caddy:2-alpine
-  #   restart: unless-stopped
-  #   depends_on: [app]
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:
-  #     - ./Caddyfile:/etc/caddy/Caddyfile
-  #     - caddy_data:/data
-  #     - caddy_config:/config
+  # HTTPS (Caddy) được thêm qua docker-compose.prod.yml — xem DEPLOY.md Bước 4.
 
 volumes:
   pgdata:
-  # caddy_data:
-  # caddy_config:

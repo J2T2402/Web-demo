@@ -1,7 +1,6 @@
-# Tùy chọn TLS: Caddy tự xin & gia hạn Let's Encrypt, tự chuyển HTTP->HTTPS,
-# tự đẩy WebSocket (Socket.IO). Đổi `tenmiien.com` thành domain thật, rồi
-# bỏ comment service `caddy` trong docker-compose.yml và bỏ map cổng 3000 ra ngoài.
+# Caddy tự cấp & gia hạn SSL (Let's Encrypt), tự chuyển HTTP->HTTPS, tự đẩy WebSocket.
+# Domain lấy từ biến môi trường DOMAIN (đặt trong .env). Caddy proxy về app qua mạng nội bộ.
 
-tenmiien.com {
+{$DOMAIN} {
     reverse_proxy app:3000
 }

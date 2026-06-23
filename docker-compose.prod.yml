@@ -1,0 +1,25 @@
+# Override production: thêm Caddy (HTTPS Let's Encrypt tự động) đứng trước app.
+# Dùng (trên Droplet):
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+# Yêu cầu: .env có DOMAIN=tenmiien.com và DNS A record đã trỏ về IP Droplet.
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      # Caddy đọc {$DOMAIN} trong Caddyfile từ biến này.
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:
