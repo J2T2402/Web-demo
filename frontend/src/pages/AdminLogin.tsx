@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ShieldCheck, ArrowLeft, AlertCircle } from 'lucide-react'
-import { auth, DEMO_USER, DEMO_PASS } from '../store/auth'
+import { auth } from '../store/auth'
 
 export default function AdminLogin({ theme, toggleTheme }: { theme: 'light' | 'dark'; toggleTheme: () => void }) {
   const [username, setUsername] = useState('')
@@ -81,10 +81,6 @@ export default function AdminLogin({ theme, toggleTheme }: { theme: 'light' | 'd
             {submitting ? 'Đang đăng nhập…' : 'Đăng nhập'}
           </button>
         </form>
-
-        <div className="mt-5 rounded-xl bg-amber-500/10 border border-amber-500/20 dark:bg-amber-500/15 dark:border-amber-500/20 px-3.5 py-3 text-center text-xs text-amber-700 dark:text-amber-300 font-medium">
-          <b>Demo</b> · Tài khoản: <span className="font-extrabold">{DEMO_USER}</span> · Mật khẩu: <span className="font-extrabold">{DEMO_PASS}</span>
-        </div>
 
         <Link
           to="/"

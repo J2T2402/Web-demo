@@ -4,10 +4,6 @@ import { apiAdminLogin } from '../lib/api'
 // Đăng nhập admin THẬT: gọi API lấy JWT, lưu localStorage.
 const KEY = 'webeventqh_admin_token'
 
-// Gợi ý tài khoản admin mặc định (server tự seed lần đầu) — hiển thị ở màn đăng nhập.
-export const DEMO_USER = 'admin'
-export const DEMO_PASS = 'admin123'
-
 const subs = new Set<() => void>()
 function emit() {
   subs.forEach((s) => s())
